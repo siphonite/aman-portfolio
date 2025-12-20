@@ -1,5 +1,6 @@
 import SocialLinks from "./SocialLinks";
 import VideoCard from "./VideoCard";
+import ContributionGraph from "./ContributionGraph";
 
 export default function Hero() {
     return (
@@ -25,6 +26,7 @@ export default function Hero() {
                 </p>
 
                 <SocialLinks />
+                <ContributionGraph />
             </div>
 
             {/* Right: Video */}
