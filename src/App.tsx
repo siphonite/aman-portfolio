@@ -4,7 +4,7 @@ import ThemeToggle from "./components/ThemeToggle";
 import { useTheme } from "./hooks/useTheme";
 
 import Hero from "./sections/hero/Hero";
-import SkillsMarquee from "./sections/skills/SkillsMarquee";
+import Technologies from "./sections/skills/Technologies";
 import ProjectsSection from "./sections/projects/ProjectsSection";
 import ExperienceSection from "./sections/experience/ExperienceSection";
 
@@ -16,7 +16,7 @@ function App() {
       <CatCursor />
       <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
       <Hero />
-      <SkillsMarquee />
+      <Technologies />
       <ProjectsSection />
       <ExperienceSection />
     </Layout>
