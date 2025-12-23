@@ -3,12 +3,11 @@ import type { Project } from "../../types";
 
 type Props = {
     project: Project;
-    image?: string;
 };
 
-export default function ProjectCard({ project, image }: Props) {
-    // Default placeholder image
-    const projectImage = image || `https://picsum.photos/seed/${project.id}/800/450`;
+export default function ProjectCard({ project }: Props) {
+    // Use project image or fallback to placeholder
+    const projectImage = project.image || `https://picsum.photos/seed/${project.id}/800/450`;
 
     return (
         <div

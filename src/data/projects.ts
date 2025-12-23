@@ -9,6 +9,7 @@ export const PROJECTS: Project[] = [
         tech: ["Rust", "Solana", "Anchor", "React", "TypeScript"],
         github: "https://github.com/Siphonite/whatsnext",
         link: "https://whatsnext-black.vercel.app/",
+        image: "/whatsnext-preview.png",
     },
     {
         id: 2,
@@ -18,5 +19,6 @@ export const PROJECTS: Project[] = [
         tech: ["Rust", "React", "TypeScript"],
         github: "https://github.com/Siphonite/Reddit_StartUp_Idea_Generator",
         link: "https://reddit-ideas-five.vercel.app/",
+        image: "/reddit-ideas-preview.png",
     },
 ];
