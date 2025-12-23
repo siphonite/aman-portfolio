@@ -1,10 +1,9 @@
 import SocialLinks from "./SocialLinks";
 import VideoCard from "./VideoCard";
-import ContributionGraph from "./ContributionGraph";
 
 export default function Hero() {
     return (
-        <section className="min-h-[70vh]">
+        <section className="min-h-[50vh]">
             {/* Main 2-column grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div>
@@ -23,9 +22,6 @@ export default function Hero() {
                     <VideoCard />
                 </div>
             </div>
-
-            {/* Contribution Graph - full width, aligned with grid edges */}
-            <ContributionGraph />
         </section>
     );
 }

@@ -5,6 +5,7 @@ import { useTheme } from "./hooks/useTheme";
 
 import Hero from "./sections/hero/Hero";
 import Technologies from "./sections/skills/Technologies";
+import ContributionGraph from "./sections/hero/ContributionGraph";
 import ProjectsSection from "./sections/projects/ProjectsSection";
 import ExperienceSection from "./sections/experience/ExperienceSection";
 
@@ -17,6 +18,7 @@ function App() {
       <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
       <Hero />
       <Technologies />
+      <ContributionGraph />
       <ProjectsSection />
       <ExperienceSection />
     </Layout>

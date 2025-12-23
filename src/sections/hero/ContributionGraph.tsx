@@ -129,7 +129,7 @@ export default function ContributionGraph() {
     const weekWidth = cellSize + gap;
 
     return (
-        <div className="mt-16 w-full" ref={containerRef}>
+        <div className="mt-4 w-full px-6 md:px-12 lg:px-20" ref={containerRef}>
             {/* Header */}
             <div className="mb-3">
                 <span className="text-sm font-medium text-zinc-300">
@@ -235,6 +235,6 @@ export default function ContributionGraph() {
                     <span className="text-[11px] text-zinc-500">More</span>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

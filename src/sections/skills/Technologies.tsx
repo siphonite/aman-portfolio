@@ -70,7 +70,7 @@ export default function Technologies() {
     const secondRow = TECHNOLOGIES.slice(midpoint);
 
     return (
-        <section className="py-24 px-6 md:px-12 lg:px-20 overflow-hidden">
+        <section className="pt-0 pb-8 px-6 md:px-12 lg:px-20 overflow-hidden">
             <div className="max-w-6xl mx-auto">
                 {/* Section Title */}
                 <h2 className="text-xs uppercase tracking-[0.3em] text-zinc-500 mb-12">
