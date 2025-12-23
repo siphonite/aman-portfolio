@@ -5,26 +5,18 @@ export const PROJECTS: Project[] = [
         id: 1,
         name: "What's Next?",
         description:
-            "Decentralized candlestick prediction market built on Solana. On-chain market logic with real-time charts.",
+            "Decentralized candlestick prediction market built on Solana with on-chain market logic and real-time charts.",
         tech: ["Rust", "Solana", "Anchor", "React", "TypeScript"],
-        featured: true,
-        github: "#",
-        link: "#",
+        github: "https://github.com/Siphonite/whatsnext",
+        link: "https://whatsnext-black.vercel.app/",
     },
     {
         id: 2,
-        name: "Axum API Boilerplate",
+        name: "Reddit StartUp Idea Generator",
         description:
-            "High-performance REST API foundation with PostgreSQL integration and Docker support.",
-        tech: ["Rust", "Axum", "PostgreSQL", "Docker"],
-        github: "#",
-    },
-    {
-        id: 3,
-        name: "Web3 Wallet Connect",
-        description:
-            "Lightweight React hooks library for seamless Solana wallet integration.",
-        tech: ["React", "TypeScript", "Solana"],
-        github: "#",
+            "StartUp Idea Generator which uses Reddit links to generate ideas using Gemini API.",
+        tech: ["Rust", "React", "TypeScript"],
+        github: "https://github.com/Siphonite/Reddit_StartUp_Idea_Generator",
+        link: "https://reddit-ideas-five.vercel.app/",
     },
 ];

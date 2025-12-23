@@ -3,63 +3,81 @@ import type { Project } from "../../types";
 
 type Props = {
     project: Project;
+    image?: string;
 };
 
-export default function ProjectCard({ project }: Props) {
+export default function ProjectCard({ project, image }: Props) {
+    // Default placeholder image
+    const projectImage = image || `https://picsum.photos/seed/${project.id}/800/450`;
+
     return (
         <div
-            className={`group p-8 rounded-3xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/50 transition-all ${project.featured ? "md:col-span-2" : ""}`}
+            className="group p-6 rounded-3xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/50 hover:border-zinc-700 transition-all duration-300 flex flex-col h-full"
         >
-            <div className="flex justify-between items-start mb-6">
-                <div>
-                    <h3 className="text-3xl font-bold mb-2">{project.name}</h3>
-                    <div className="flex gap-3 flex-wrap">
-                        {project.tech.map((t, i) => (
-                            <span
-                                key={i}
-                                className="text-[10px] mono uppercase px-2 py-1 rounded bg-zinc-800 text-zinc-400"
-                            >
-                                {t}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-                <div className="flex gap-4">
+            {/* Project Image */}
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-6 bg-zinc-800/50 border border-zinc-700/50">
+                <img
+                    src={projectImage}
+                    alt={`${project.name} preview`}
+                    className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                />
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+
+            {/* Header with title and links */}
+            <div className="flex justify-between items-start mb-3">
+                <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors duration-300">
+                    {project.name}
+                </h3>
+                <div className="flex gap-2">
                     {project.github && (
-                        <a href={project.github} target="_blank" rel="noreferrer">
+                        <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="p-2 rounded-lg bg-zinc-800/50 hover:bg-zinc-700 transition-colors duration-200"
+                            title="View GitHub Repository"
+                        >
                             <Github
-                                size={20}
-                                className="text-zinc-500 hover:text-white cursor-pointer"
+                                size={18}
+                                className="text-zinc-400 hover:text-white transition-colors"
                             />
                         </a>
                     )}
                     {project.link && (
-                        <a href={project.link} target="_blank" rel="noreferrer">
+                        <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="p-2 rounded-lg bg-zinc-800/50 hover:bg-cyan-500/20 transition-colors duration-200"
+                            title="View Live Preview"
+                        >
                             <ExternalLink
-                                size={20}
-                                className="text-zinc-500 hover:text-white cursor-pointer"
+                                size={18}
+                                className="text-zinc-400 hover:text-cyan-400 transition-colors"
                             />
                         </a>
                     )}
                 </div>
             </div>
-            <p className="text-zinc-400 text-lg leading-relaxed max-w-2xl mb-8">
+
+            {/* Tech stack tags */}
+            <div className="flex gap-2 flex-wrap mb-4">
+                {project.tech.map((t, i) => (
+                    <span
+                        key={i}
+                        className="text-[10px] mono uppercase px-2.5 py-1 rounded-full bg-zinc-800/80 text-zinc-400 border border-zinc-700/50"
+                    >
+                        {t}
+                    </span>
+                ))}
+            </div>
+
+            {/* Description */}
+            <p className="text-zinc-400 text-sm leading-relaxed flex-grow">
                 {project.description}
             </p>
-            {project.featured && (
-                <div className="aspect-video w-full rounded-2xl bg-zinc-800/50 border border-zinc-700 overflow-hidden relative">
-                    <img
-                        src="https://picsum.photos/seed/crypto/1200/600"
-                        alt="Project preview"
-                        className="w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-opacity"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="px-6 py-3 bg-white text-black rounded-full font-bold flex items-center gap-2">
-                            View Project <ExternalLink size={16} />
-                        </button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
