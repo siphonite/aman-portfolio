@@ -7,7 +7,7 @@ export default function ContactSection() {
         <section className="py-24">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
                 {/* Left Column - Contact Info */}
-                <div>
+                <div className="flex flex-col">
                     <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-8">
                         Get in Touch
                     </h2>
@@ -48,6 +48,39 @@ export default function ContactSection() {
                                 );
                             })}
                         </div>
+                    </div>
+
+                    {/* Let's Connect - Book a Call */}
+                    <div className="mt-auto pt-8 mb-12">
+                        <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">
+                            Let's Connect:
+                        </p>
+                        <a
+                            href="https://calendly.com/your-calendly-link"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 
+                                     text-black font-semibold rounded-lg transition-all duration-200
+                                     hover:shadow-lg hover:shadow-cyan-500/25"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            Book a Call
+                        </a>
                     </div>
                 </div>
 
