@@ -5,8 +5,9 @@ export default function Footer() {
                 BUILD WITH INTENT
             </div>
             <p className="text-zinc-600 mono text-xs uppercase tracking-[0.4em]">
-                © 2024 AMAN KUMAR — CRAFTED WITH CARE
+                © 2025 AMAN KUMAR — CRAFTED WITH CARE
             </p>
         </footer>
     );
 }
+

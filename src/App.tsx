@@ -8,6 +8,7 @@ import Technologies from "./sections/skills/Technologies";
 import ContributionGraph from "./sections/hero/ContributionGraph";
 import ProjectsSection from "./sections/projects/ProjectsSection";
 import ExperienceSection from "./sections/experience/ExperienceSection";
+import ContactSection from "./sections/contact/ContactSection";
 
 function App() {
   const { isDark, setIsDark } = useTheme();
@@ -21,6 +22,7 @@ function App() {
       <ContributionGraph />
       <ProjectsSection />
       <ExperienceSection />
+      <ContactSection />
     </Layout>
   );
 }
