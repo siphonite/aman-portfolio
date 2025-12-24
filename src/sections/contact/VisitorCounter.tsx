@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 
 function getOrdinalSuffix(n: number): string {
     const s = ["th", "st", "nd", "rd"];
@@ -11,19 +12,51 @@ export default function VisitorCounter() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Using CountAPI to track visitors
-        // Namespace: aman-portfolio, Key: visitors
-        fetch("https://api.countapi.xyz/hit/aman-portfolio-siphonite/visitors")
-            .then((res) => res.json())
-            .then((data) => {
-                if (data && typeof data.value === "number") {
-                    setVisitorNumber(data.value);
+        const incrementVisitor = async () => {
+            try {
+                // Check if already counted in this session
+                const sessionKey = "aman-portfolio-session";
+                const alreadyCounted = sessionStorage.getItem(sessionKey);
+
+                if (alreadyCounted) {
+                    // Just fetch current count without incrementing
+                    const { data } = await supabase
+                        .from("visitor_counter")
+                        .select("count")
+                        .eq("id", 1)
+                        .single();
+
+                    if (data) {
+                        setVisitorNumber(data.count);
+                    }
+                } else {
+                    // Increment and get new count
+                    const { data: currentData } = await supabase
+                        .from("visitor_counter")
+                        .select("count")
+                        .eq("id", 1)
+                        .single();
+
+                    if (currentData) {
+                        const newCount = currentData.count + 1;
+
+                        await supabase
+                            .from("visitor_counter")
+                            .update({ count: newCount })
+                            .eq("id", 1);
+
+                        setVisitorNumber(newCount);
+                        sessionStorage.setItem(sessionKey, "true");
+                    }
                 }
+            } catch (error) {
+                console.error("Error updating visitor count:", error);
+            } finally {
                 setIsLoading(false);
-            })
-            .catch(() => {
-                setIsLoading(false);
-            });
+            }
+        };
+
+        incrementVisitor();
     }, []);
 
     if (isLoading) {
@@ -37,7 +70,7 @@ export default function VisitorCounter() {
     }
 
     if (visitorNumber === null) {
-        return null; // Hide counter if failed to load
+        return null;
     }
 
     return (
@@ -53,4 +86,3 @@ export default function VisitorCounter() {
         </div>
     );
 }
-
