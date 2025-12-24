@@ -42,6 +42,12 @@ a {
     color: inherit;
 }
 
+/* ====== Responsive Images ====== */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 /* ====== Modal Animation ====== */
 @keyframes zoom-in-95 {
     from {

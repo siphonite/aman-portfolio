@@ -4,11 +4,11 @@ import VisitorCounter from "./VisitorCounter";
 
 export default function ContactSection() {
     return (
-        <section className="py-24">
+        <section className="py-12 md:py-24 pb-24 md:pb-24">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
                 {/* Left Column - Contact Info */}
                 <div className="flex flex-col">
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-8">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 md:mb-8">
                         Get in Touch
                     </h2>
                     <p className="text-lg text-zinc-400 leading-relaxed mb-10">
@@ -85,7 +85,7 @@ export default function ContactSection() {
                 </div>
 
                 {/* Right Column - Contact Form */}
-                <div className="bg-zinc-900/30 border border-zinc-800 rounded-2xl p-8">
+                <div className="bg-zinc-900/30 border border-zinc-800 rounded-2xl p-4 md:p-8">
                     <ContactForm />
                 </div>
             </div>

@@ -7,7 +7,7 @@ function TechCard({ name, icon: Icon, color }: { name: string; icon: React.Compo
                        bg-white/[0.02] border border-white/5 
                        hover:bg-white/[0.04] hover:border-white/10 
                        transition-all duration-300 ease-out
-                       hover:scale-[1.02] min-w-[120px]"
+                       hover:scale-[1.02] min-w-[100px] md:min-w-[120px]"
             style={{
                 boxShadow: `0 0 0 0 ${color}00`,
             }}
@@ -41,8 +41,8 @@ function MarqueeRow({ technologies, direction, speed = 30 }: MarqueeRowProps) {
     return (
         <div className="relative overflow-hidden w-full">
             {/* Gradient masks for smooth fade effect */}
-            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-zinc-950 to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-zinc-950 to-transparent z-10 pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-r from-zinc-950 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-l from-zinc-950 to-transparent z-10 pointer-events-none" />
 
             <div
                 className={`flex gap-4 ${direction === 'left' ? 'animate-marquee-left' : 'animate-marquee-right'}`}

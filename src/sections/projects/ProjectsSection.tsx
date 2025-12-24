@@ -4,7 +4,7 @@ import { PROJECTS } from "../../data/projects";
 
 export default function ProjectsSection() {
     return (
-        <section id="projects" className="py-32">
+        <section id="projects" className="py-16 md:py-32">
             <SectionHeader title="Featured Projects" />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

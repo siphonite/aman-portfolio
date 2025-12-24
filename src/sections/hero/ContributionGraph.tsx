@@ -29,6 +29,7 @@ function formatDate(dateStr: string): string {
 
 const TOTAL_WEEKS = 53;
 const DAY_LABEL_WIDTH = 32;
+const DAY_LABEL_WIDTH_MOBILE = 0; // Hide day labels on mobile
 
 export default function ContributionGraph() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -39,17 +40,23 @@ export default function ContributionGraph() {
     const [isLoading, setIsLoading] = useState(true);
     const [cellSize, setCellSize] = useState(12);
     const [gap, setGap] = useState(3);
+    const [isMobile, setIsMobile] = useState(false);
 
     // Calculate responsive cell size based on container width
     useEffect(() => {
         const updateSize = () => {
             if (containerRef.current) {
                 const containerWidth = containerRef.current.offsetWidth;
-                const availableWidth = containerWidth - DAY_LABEL_WIDTH;
+                const mobile = containerWidth < 640;
+                setIsMobile(mobile);
+
+                const labelWidth = mobile ? DAY_LABEL_WIDTH_MOBILE : DAY_LABEL_WIDTH;
+                const availableWidth = containerWidth - labelWidth;
+
                 // Calculate optimal cell size to fit all weeks with gaps
                 const maxCellAndGap = availableWidth / TOTAL_WEEKS;
-                const newGap = Math.max(2, Math.min(4, Math.floor(maxCellAndGap * 0.2)));
-                const newCellSize = Math.max(10, Math.min(14, Math.floor(maxCellAndGap - newGap)));
+                const newGap = Math.max(1, Math.min(4, Math.floor(maxCellAndGap * 0.2)));
+                const newCellSize = Math.max(5, Math.min(14, Math.floor(maxCellAndGap - newGap)));
                 setCellSize(newCellSize);
                 setGap(newGap);
             }
@@ -142,7 +149,7 @@ export default function ContributionGraph() {
                 {/* Month labels */}
                 <div
                     className="relative h-5 mb-2"
-                    style={{ marginLeft: `${DAY_LABEL_WIDTH}px` }}
+                    style={{ marginLeft: isMobile ? '0px' : `${DAY_LABEL_WIDTH}px` }}
                 >
                     {!isLoading && monthLabels.map((label, i) => (
                         <span
@@ -157,19 +164,21 @@ export default function ContributionGraph() {
 
                 {/* Graph with day labels */}
                 <div className="flex w-full">
-                    {/* Day labels */}
-                    <div
-                        className="flex-shrink-0 flex flex-col text-[11px] text-zinc-500"
-                        style={{ width: `${DAY_LABEL_WIDTH}px`, gap: `${gap}px` }}
-                    >
-                        <span style={{ height: `${cellSize}px` }}></span>
-                        <span style={{ height: `${cellSize}px`, lineHeight: `${cellSize}px` }}>Mon</span>
-                        <span style={{ height: `${cellSize}px` }}></span>
-                        <span style={{ height: `${cellSize}px`, lineHeight: `${cellSize}px` }}>Wed</span>
-                        <span style={{ height: `${cellSize}px` }}></span>
-                        <span style={{ height: `${cellSize}px`, lineHeight: `${cellSize}px` }}>Fri</span>
-                        <span style={{ height: `${cellSize}px` }}></span>
-                    </div>
+                    {/* Day labels - Hidden on mobile */}
+                    {!isMobile && (
+                        <div
+                            className="flex-shrink-0 flex flex-col text-[11px] text-zinc-500"
+                            style={{ width: `${DAY_LABEL_WIDTH}px`, gap: `${gap}px` }}
+                        >
+                            <span style={{ height: `${cellSize}px` }}></span>
+                            <span style={{ height: `${cellSize}px`, lineHeight: `${cellSize}px` }}>Mon</span>
+                            <span style={{ height: `${cellSize}px` }}></span>
+                            <span style={{ height: `${cellSize}px`, lineHeight: `${cellSize}px` }}>Wed</span>
+                            <span style={{ height: `${cellSize}px` }}></span>
+                            <span style={{ height: `${cellSize}px`, lineHeight: `${cellSize}px` }}>Fri</span>
+                            <span style={{ height: `${cellSize}px` }}></span>
+                        </div>
+                    )}
 
                     {/* Contribution grid */}
                     <div className="flex-1 overflow-hidden">

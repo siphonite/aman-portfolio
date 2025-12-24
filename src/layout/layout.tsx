@@ -15,7 +15,7 @@ export default function Layout({ children, isDark, onNavigate, currentPage }: Pr
             className={`min-h-screen ${isDark ? "bg-[#0A0A0A] text-white" : "bg-white text-black"} transition-colors duration-500`}
         >
             <Navbar isDark={isDark} onNavigate={onNavigate} currentPage={currentPage} />
-            <main className="max-w-[1400px] mx-auto pl-24 pr-12 md:pl-24 md:pr-20 lg:pl-28 lg:pr-24 py-24">
+            <main className="max-w-[1400px] mx-auto px-4 pt-20 pb-8 sm:pl-24 sm:pr-20 sm:py-24 lg:pl-28 lg:pr-24">
                 {children}
             </main>
             <Footer />
