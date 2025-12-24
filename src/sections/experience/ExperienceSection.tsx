@@ -3,7 +3,7 @@ import { WORK_EXPERIENCES } from "../../data/experience";
 
 export default function ExperienceSection() {
     return (
-        <section className="py-32 border-t border-zinc-900">
+        <section className="py-32">
             <SectionHeader title="Work Experience" />
 
             <div className="space-y-16">

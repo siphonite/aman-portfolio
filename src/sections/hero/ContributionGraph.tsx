@@ -45,11 +45,11 @@ export default function ContributionGraph() {
         const updateSize = () => {
             if (containerRef.current) {
                 const containerWidth = containerRef.current.offsetWidth;
-                const availableWidth = containerWidth - DAY_LABEL_WIDTH - 10;
-                // Calculate optimal cell size to fit all 53 weeks with gaps
+                const availableWidth = containerWidth - DAY_LABEL_WIDTH;
+                // Calculate optimal cell size to fit all weeks with gaps
                 const maxCellAndGap = availableWidth / TOTAL_WEEKS;
-                const newGap = Math.max(1, Math.min(2, Math.floor(maxCellAndGap * 0.12)));
-                const newCellSize = Math.max(6, Math.min(10, Math.floor(maxCellAndGap - newGap)));
+                const newGap = Math.max(2, Math.min(4, Math.floor(maxCellAndGap * 0.2)));
+                const newCellSize = Math.max(10, Math.min(14, Math.floor(maxCellAndGap - newGap)));
                 setCellSize(newCellSize);
                 setGap(newGap);
             }
@@ -129,7 +129,7 @@ export default function ContributionGraph() {
     const weekWidth = cellSize + gap;
 
     return (
-        <div className="mt-4 w-full px-2 md:px-6 lg:px-12" ref={containerRef}>
+        <div className="mt-4 w-full pl-0 pr-6 md:pl-0 md:pr-12 lg:pl-4 lg:pr-20" ref={containerRef}>
             {/* Header */}
             <div className="mb-3">
                 <span className="text-sm font-medium text-zinc-300">
