@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Play, Pause, Volume2 } from "lucide-react";
 import { SiSpotify } from "react-icons/si";
 
@@ -9,74 +9,151 @@ declare global {
     }
 }
 
+interface TrackInfo {
+    title: string;
+    artist: string;
+    artwork: string;
+}
+
 export default function MusicPlayer() {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const widgetRef = useRef<any>(null);
+    const hasLoadedMetadata = useRef(false);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [trackInfo, setTrackInfo] = useState({
-        title: "",
-        artist: "",
-        artwork: "https://picsum.photos/seed/music/200/200"
-    });
+    const [trackInfo, setTrackInfo] = useState<TrackInfo | null>(null);
     const [volume, setVolume] = useState(50);
 
     const playlistUrl = "https://soundcloud.com/user-826990615-552432678/sets/vibin";
 
+    const getArtwork = useCallback((sound: any): string => {
+        if (!sound) return "";
+        const url = sound.artwork_url || sound.user?.avatar_url || "";
+        if (!url) return "";
+        return url.replace("-large", "-t500x500").replace("large", "t500x500");
+    }, []);
+
+    // Calculate which track to show based on current hour
+    const getHourlyIndex = useCallback((totalTracks: number): number => {
+        const currentHour = new Date().getHours();
+        const today = new Date().toDateString();
+        const seed = `${today}-${currentHour}`;
+        let hash = 0;
+        for (let i = 0; i < seed.length; i++) {
+            hash = (hash << 5) - hash + seed.charCodeAt(i);
+            hash |= 0;
+        }
+        return Math.abs(hash) % totalTracks;
+    }, []);
+
     useEffect(() => {
+        let intervalId: ReturnType<typeof setInterval>;
+        let pollIntervalId: ReturnType<typeof setInterval>;
+
         const loadWidget = () => {
             if (window.SC && iframeRef.current) {
                 const widget = window.SC.Widget(iframeRef.current);
                 widgetRef.current = widget;
 
-                widget.bind(window.SC.Widget.Events.READY, () => {
-                    const updateHourlyTrack = () => {
-                        widget.getSounds((sounds: any[]) => {
-                            if (sounds && sounds.length > 0) {
-                                const currentHour = new Date().getHours();
-                                const today = new Date().toDateString();
-                                const seed = `${today}-${currentHour}`;
-                                let hash = 0;
-                                for (let i = 0; i < seed.length; i++) {
-                                    hash = (hash << 5) - hash + seed.charCodeAt(i);
-                                    hash |= 0;
-                                }
-                                const index = Math.abs(hash) % sounds.length;
+                // Function to fetch current sound info after skip
+                const fetchCurrentSoundInfo = () => {
+                    widget.getCurrentSound((sound: any) => {
+                        if (sound && sound.title && !hasLoadedMetadata.current) {
+                            const artwork = getArtwork(sound);
+                            setTrackInfo({
+                                title: sound.title,
+                                artist: sound.user?.username || "Unknown Artist",
+                                artwork: artwork
+                            });
+                            setIsLoading(false);
+                            hasLoadedMetadata.current = true;
 
-                                const sound = sounds[index];
-                                if (sound) {
-                                    setTrackInfo({
-                                        title: sound.title,
-                                        artist: sound.user.username,
-                                        artwork: sound.artwork_url ? sound.artwork_url.replace("large", "t500x500") : "https://picsum.photos/seed/music/200/200"
-                                    });
-                                }
+                            // Get duration
+                            widget.getDuration((d: number) => {
+                                if (d > 0) setDuration(d);
+                            });
+                        }
+                    });
+                };
+
+                // Skip to the hourly track and then get its info
+                const loadHourlyTrack = () => {
+                    widget.getSounds((sounds: any[]) => {
+                        if (sounds && sounds.length > 0) {
+                            const index = getHourlyIndex(sounds.length);
+                            widget.skip(index);
+
+                            // Wait for skip to complete, then fetch current sound
+                            setTimeout(() => {
+                                fetchCurrentSoundInfo();
+                            }, 1000);
+                        }
+                    });
+                };
+
+                // Poll for sounds availability
+                const pollForSounds = () => {
+                    let pollCount = 0;
+                    const maxPolls = 30;
+
+                    pollIntervalId = setInterval(() => {
+                        pollCount++;
+
+                        if (hasLoadedMetadata.current || pollCount > maxPolls) {
+                            clearInterval(pollIntervalId);
+                            return;
+                        }
+
+                        widget.getSounds((sounds: any[]) => {
+                            if (sounds && sounds.length > 0 && !hasLoadedMetadata.current) {
+                                clearInterval(pollIntervalId);
+                                const index = getHourlyIndex(sounds.length);
                                 widget.skip(index);
+
+                                // Wait for skip, then get current sound with full metadata
+                                setTimeout(() => {
+                                    fetchCurrentSoundInfo();
+                                }, 1000);
                             }
                         });
-                    };
+                    }, 500);
+                };
 
-                    updateHourlyTrack();
+                widget.bind(window.SC.Widget.Events.READY, () => {
+                    // Start polling for sounds
+                    pollForSounds();
 
                     // Check for hour change every minute
-                    setInterval(() => {
+                    intervalId = setInterval(() => {
                         const now = new Date();
                         if (now.getMinutes() === 0 && now.getSeconds() < 10) {
-                            updateHourlyTrack();
+                            hasLoadedMetadata.current = false;
+                            loadHourlyTrack();
                         }
                     }, 60000);
+                });
+
+                // Listen for SOUND_LOAD event which fires when a sound starts loading
+                widget.bind(window.SC.Widget.Events.LOAD_PROGRESS, () => {
+                    if (!hasLoadedMetadata.current) {
+                        fetchCurrentSoundInfo();
+                    }
                 });
 
                 widget.bind(window.SC.Widget.Events.PLAY, () => {
                     setIsPlaying(true);
                     widget.getCurrentSound((sound: any) => {
-                        if (sound) {
+                        if (sound && sound.title) {
+                            const artwork = getArtwork(sound);
                             setTrackInfo({
                                 title: sound.title,
-                                artist: sound.user.username,
-                                artwork: sound.artwork_url ? sound.artwork_url.replace("large", "t500x500") : "https://picsum.photos/seed/music/200/200"
+                                artist: sound.user?.username || "Unknown Artist",
+                                artwork: artwork
                             });
+                            setIsLoading(false);
+                            hasLoadedMetadata.current = true;
                         }
                     });
                     widget.getDuration((d: number) => setDuration(d));
@@ -103,9 +180,18 @@ export default function MusicPlayer() {
                     clearInterval(checkSC);
                 }
             }, 100);
-            return () => clearInterval(checkSC);
+            return () => {
+                clearInterval(checkSC);
+                if (intervalId) clearInterval(intervalId);
+                if (pollIntervalId) clearInterval(pollIntervalId);
+            };
         }
-    }, []);
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+            if (pollIntervalId) clearInterval(pollIntervalId);
+        };
+    }, [getHourlyIndex, getArtwork]);
 
     const togglePlay = () => {
         if (widgetRef.current) {
@@ -156,23 +242,43 @@ export default function MusicPlayer() {
             {/* Top Row: Artwork + Info & Progress */}
             <div className="flex gap-5 items-start relative z-10">
                 {/* Artwork */}
-                <div className="w-16 h-16 flex-shrink-0 border border-white/[0.05] overflow-hidden">
-                    <img
-                        src={trackInfo.artwork}
-                        alt={trackInfo.title}
-                        className="w-full h-full object-cover"
-                    />
+                <div className="w-16 h-16 flex-shrink-0 border border-white/[0.05] overflow-hidden bg-zinc-800">
+                    {isLoading || !trackInfo ? (
+                        <div className="w-full h-full bg-zinc-800 animate-pulse" />
+                    ) : trackInfo.artwork ? (
+                        <img
+                            src={trackInfo.artwork}
+                            alt={trackInfo.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-zinc-700 flex items-center justify-center">
+                            <SiSpotify size={24} className="text-zinc-500" />
+                        </div>
+                    )}
                 </div>
 
                 {/* Info and Progress Column */}
                 <div className="flex-1 min-w-0 flex flex-col gap-3">
                     <div className="min-w-0">
-                        <h3 className="text-white font-bold truncate text-[16px] leading-tight mb-0.5">
-                            {trackInfo.title || "Fetching for Song"}
-                        </h3>
-                        <p className="text-zinc-500 truncate text-[12px] leading-none uppercase tracking-wider font-medium">
-                            {trackInfo.artist || "..."}
-                        </p>
+                        {isLoading || !trackInfo ? (
+                            <>
+                                <div className="h-4 bg-zinc-800 rounded animate-pulse w-3/4 mb-2" />
+                                <div className="h-3 bg-zinc-800 rounded animate-pulse w-1/2" />
+                            </>
+                        ) : (
+                            <>
+                                <h3 className="text-white font-bold truncate text-[16px] leading-tight mb-0.5">
+                                    {trackInfo.title}
+                                </h3>
+                                <p className="text-zinc-500 truncate text-[12px] leading-none uppercase tracking-wider font-medium">
+                                    {trackInfo.artist}
+                                </p>
+                            </>
+                        )}
                     </div>
 
                     {/* Progress Bar Area */}
