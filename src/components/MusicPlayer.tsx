@@ -127,19 +127,24 @@ export default function MusicPlayer() {
             widget.bind(window.SC.Widget.Events.READY, () => {
                 setWidgetReady(true);
                 // Initial setup once ready
-                widget.getSounds((sounds) => {
-                    if (sounds && sounds.length > 0) {
-                        const index = getHourlyIndex(sounds.length);
-                        widget.skip(index);
-
-                        // Small delay to let skip process
-                        setTimeout(() => {
+                const initializePlayer = (retries = 3) => {
+                    widget.getSounds((sounds) => {
+                        if (sounds && sounds.length > 0) {
+                            const index = getHourlyIndex(sounds.length);
+                            updateTrackInfo(sounds[index]);
+                            widget.skip(index);
+                        } else if (retries > 0) {
+                            setTimeout(() => initializePlayer(retries - 1), 500);
+                        } else {
+                            // Last resort fallback
                             widget.getCurrentSound((sound) => {
                                 if (sound) updateTrackInfo(sound);
                             });
-                        }, 500);
-                    }
-                });
+                        }
+                    });
+                };
+
+                initializePlayer();
             });
 
             // Bind events
@@ -219,7 +224,7 @@ export default function MusicPlayer() {
             <iframe
                 ref={iframeRef}
                 src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(PLAYLIST_URL)}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false`}
-                className="hidden"
+                className="absolute w-0 h-0 opacity-0 pointer-events-none"
                 allow="autoplay"
                 title="Music Player"
             />
