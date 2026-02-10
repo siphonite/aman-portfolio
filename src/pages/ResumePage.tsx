@@ -1,4 +1,5 @@
 import { FileDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const RESUME_FILENAME = "AMAN-Kumar.pdf";
 
@@ -34,12 +35,12 @@ export default function ResumePage() {
                 </a>
 
                 <div className="mt-12">
-                    <a
-                        href="/"
+                    <Link
+                        to="/"
                         className="text-zinc-500 hover:text-cyan-400 transition-colors text-sm"
                     >
                         ← Back to Home
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

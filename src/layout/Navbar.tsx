@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
     Home,
     Layers,
@@ -18,50 +19,44 @@ type NavItem = {
 
 type NavbarProps = {
     isDark: boolean;
-    onNavigate?: (page: "home" | "resume") => void;
-    currentPage?: "home" | "resume";
 };
 
-export default function Navbar({ isDark, onNavigate, currentPage = "home" }: NavbarProps) {
+export default function Navbar({ isDark }: NavbarProps) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    const scrollToSection = (sectionId: string) => {
-        if (currentPage !== "home" && onNavigate) {
-            onNavigate("home");
-            setTimeout(() => {
+    // Check if we are physically on the home route
+    const isHomeRoute = location.pathname === "/";
+
+    const handleNavigation = (sectionId?: string) => {
+        if (sectionId) {
+            if (isHomeRoute) {
+                // If on home, just scroll
                 const element = document.getElementById(sectionId);
                 if (element) {
                     element.scrollIntoView({ behavior: "smooth" });
                 }
-            }, 100);
+            } else {
+                // If not on home, navigate with query param
+                navigate(`/?section=${sectionId}`);
+            }
         } else {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
+            // "Home" button clicked
+            if (isHomeRoute) {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+                navigate("/");
             }
         }
         setMenuOpen(false);
     };
 
-    const scrollToTop = () => {
-        if (currentPage !== "home" && onNavigate) {
-            onNavigate("home");
-        } else {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-        setMenuOpen(false);
-    };
-
-    const handleNavAction = (action: () => void) => {
-        action();
-        setMenuOpen(false);
-    };
-
     const NAV_ITEMS: NavItem[] = [
-        { icon: <Home size={20} />, label: "Home", action: scrollToTop },
-        { icon: <Layers size={20} />, label: "Projects", action: () => scrollToSection("projects") },
-        { icon: <Briefcase size={20} />, label: "Work", action: () => scrollToSection("experience") },
-        { icon: <FileText size={20} />, label: "Resume", action: () => { onNavigate?.("resume"); setMenuOpen(false); } },
+        { icon: <Home size={20} />, label: "Home", action: () => handleNavigation() },
+        { icon: <Layers size={20} />, label: "Projects", action: () => handleNavigation("projects") },
+        { icon: <Briefcase size={20} />, label: "Work", action: () => handleNavigation("experience") },
+        { icon: <FileText size={20} />, label: "Resume", action: () => { navigate("/resume"); setMenuOpen(false); } },
         { icon: <MessageSquare size={20} />, label: "Blogs", action: () => window.open("https://medium.com/@amansinha327", "_blank") },
     ];
 
@@ -104,10 +99,10 @@ export default function Navbar({ isDark, onNavigate, currentPage = "home" }: Nav
                         {NAV_ITEMS.map((item, i) => (
                             <button
                                 key={i}
-                                onClick={() => handleNavAction(item.action)}
-                                className={`flex items-center gap-4 text-xl font-medium transition-colors ${i === 0 && currentPage === "home"
-                                        ? (isDark ? "text-cyan-400" : "text-cyan-600")
-                                        : (isDark ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-black")
+                                onClick={item.action}
+                                className={`flex items-center gap-4 text-xl font-medium transition-colors ${i === 0 && isHomeRoute
+                                    ? (isDark ? "text-cyan-400" : "text-cyan-600")
+                                    : (isDark ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-black")
                                     }`}
                             >
                                 {item.icon}
@@ -128,9 +123,9 @@ export default function Navbar({ isDark, onNavigate, currentPage = "home" }: Nav
                         <button
                             key={i}
                             onClick={item.action}
-                            className={`group relative transition-colors ${i === 0 && currentPage === "home"
-                                    ? (isDark ? "text-white" : "text-black")
-                                    : (isDark ? "text-zinc-500 hover:text-white" : "text-zinc-400 hover:text-black")
+                            className={`group relative transition-colors ${i === 0 && isHomeRoute
+                                ? (isDark ? "text-white" : "text-black")
+                                : (isDark ? "text-zinc-500 hover:text-white" : "text-zinc-400 hover:text-black")
                                 }`}
                         >
                             {item.icon}
@@ -147,4 +142,3 @@ export default function Navbar({ isDark, onNavigate, currentPage = "home" }: Nav
         </>
     );
 }
-
