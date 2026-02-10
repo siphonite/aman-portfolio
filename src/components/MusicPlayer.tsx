@@ -126,25 +126,29 @@ export default function MusicPlayer() {
 
             widget.bind(window.SC.Widget.Events.READY, () => {
                 setWidgetReady(true);
-                // Initial setup once ready
-                const initializePlayer = (retries = 3) => {
-                    widget.getSounds((sounds) => {
-                        if (sounds && sounds.length > 0) {
-                            const index = getHourlyIndex(sounds.length);
-                            updateTrackInfo(sounds[index]);
-                            widget.skip(index);
-                        } else if (retries > 0) {
-                            setTimeout(() => initializePlayer(retries - 1), 500);
-                        } else {
-                            // Last resort fallback
-                            widget.getCurrentSound((sound) => {
-                                if (sound) updateTrackInfo(sound);
-                            });
+
+                // The iframe src already loaded the playlist — no need to call load() again.
+                // Just pick the hourly track and fetch its full metadata.
+                widget.getSounds((sounds) => {
+                    if (sounds && sounds.length > 0) {
+                        const index = getHourlyIndex(sounds.length);
+                        widget.skip(index);
+                    }
+                });
+
+                // Fetch fully hydrated metadata via getCurrentSound after skip settles
+                const fetchMetadata = () => {
+                    widget.getCurrentSound((sound) => {
+                        if (sound && sound.title) {
+                            updateTrackInfo(sound);
+                            widget.getDuration((d) => setDuration(d));
                         }
                     });
                 };
 
-                initializePlayer();
+                setTimeout(fetchMetadata, 100);
+                setTimeout(fetchMetadata, 500);
+                setTimeout(fetchMetadata, 1500);
             });
 
             // Bind events
