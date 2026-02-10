@@ -1,4 +1,4 @@
-import { SOCIAL_LINKS } from "../../data/social";
+import { SOCIAL_LINKS } from "../data/social";
 
 export default function SocialLinks() {
     return (

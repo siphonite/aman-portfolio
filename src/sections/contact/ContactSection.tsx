@@ -1,6 +1,6 @@
 import { CONTACT_SOCIAL_LINKS } from "../../data/contactSocial";
 import ContactForm from "./ContactForm";
-import VisitorCounter from "./VisitorCounter";
+import VisitorCounter from "../../components/VisitorCounter";
 
 export default function ContactSection() {
     return (

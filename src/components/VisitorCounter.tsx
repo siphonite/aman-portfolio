@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../lib/supabase";
 
 function getOrdinalSuffix(n: number): string {
     const s = ["th", "st", "nd", "rd"];

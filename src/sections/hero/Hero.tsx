@@ -1,5 +1,5 @@
-import SocialLinks from "./SocialLinks";
-import MusicPlayer from "./MusicPlayer";
+import SocialLinks from "../../components/SocialLinks";
+import MusicPlayer from "../../components/MusicPlayer";
 
 export default function Hero() {
     return (
