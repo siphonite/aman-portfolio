@@ -3,22 +3,22 @@ import type { Project } from "../types";
 export const PROJECTS: Project[] = [
     {
         id: 1,
-        name: "What's Next?",
+        name: "FIRST",
         description:
-            "Decentralized candlestick prediction market built on Solana with on-chain market logic and real-time charts.",
-        tech: ["Rust", "Solana", "Anchor", "React", "TypeScript"],
-        github: "https://github.com/Siphonite/whatsnext",
-        link: "https://whatsnext-black.vercel.app/",
-        image: "/whatsnext-preview.png",
+            "Deterministic crash-consistency testing framework for storage and WAL-based systems. Enables reproducible crash/restart cycles and invariant-based recovery validation. Focused on reliability testing, failure reproduction, and correctness guarantees.",
+        tech: ["Rust", "Filesystems", "Testing", "Crash Consistency"],
+        github: "https://github.com/siphonite/first",
+        link: "https://crates.io/crates/first",
+        image: "/first-preview.jpeg",
     },
     {
         id: 2,
-        name: "Reddit StartUp Idea Generator",
+        name: "What's Next?",
         description:
-            "StartUp Idea Generator which uses Reddit links to generate ideas using Gemini API.",
-        tech: ["Rust", "React", "TypeScript"],
-        github: "https://github.com/Siphonite/Reddit_StartUp_Idea_Generator",
-        link: "https://reddit-ideas-five.vercel.app/",
-        image: "/reddit-ideas-preview.png",
+            "Solana-Based Candlestick Prediction Market. Delivered an end-to-end product with backend, frontend, and system integration. Implemented secure workflows, real-time data display, and user interactions.",
+        tech: ["Rust", "Solana", "Anchor", "React", "TypeScript"],
+        github: "https://github.com/siphonite/whatsnext",
+        link: "https://whatsnext-black.vercel.app/",
+        image: "/whatsnext-preview.png",
     },
 ];

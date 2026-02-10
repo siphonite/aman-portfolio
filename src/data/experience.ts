@@ -7,12 +7,12 @@ export const WORK_EXPERIENCES: WorkExperience[] = [
         location: "Jaipur (Remote)",
         client: "HMD Global",
         clientLogo: "/logos/hmd_global_logo.jpg",
-        role: "Sales Specialist",
+        role: "Technical Support Executive",
         period: "September 2024 - October 2025",
         responsibilities: [
-            "Handled inbound business inquiries from global sellers and provided detailed information on Enterprise Mobility Management, Security Solutions, and IoT Connectivity",
-            "Assessed business needs, facilitated onboarding process for new business clients, and followed up with prospects to ensure smooth client acquisition",
-            "Tracked conversion rates and maintained interaction records to optimize sales performance for business partnerships"
+            "Provided first-line technical support for enterprise customers across device management, security features, and connectivity services",
+            "Diagnosed configuration and service-related issues, guided customers through resolution steps, and supported onboarding and activation",
+            "Documented cases and collaborated with internal teams to escalate complex issues and ensure timely resolution"
         ]
     },
     {

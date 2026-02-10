@@ -7,16 +7,21 @@ export default function Hero() {
             {/* Main 2-column grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-end">
                 <div className="max-w-3xl">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-6 md:mb-8 leading-[0.9]">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-2 md:mb-4 leading-[0.9]">
                         Aman Kumar
                     </h1>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-zinc-500 max-w-xl leading-relaxed font-light">
-                        I am a results-driven sales and operations professional with years of experience in global client relations, now learning, building and shipping on-chain projects in tech, blockchain, and Web3.
+
+                    <h2 className="text-xl md:text-2xl font-medium text-zinc-300 mb-6 tracking-tight">
+                        Learning and Building
+                    </h2>
+
+                    <p className="text-base md:text-lg text-zinc-500 max-w-lg leading-relaxed font-light mb-8">
+                        I have 3+ years of experience in sales, operations, and technical support, and I’m now learning, building, and shipping projects across backend, systems, and data-focused domains.
                     </p>
                     <SocialLinks />
                 </div>
 
-                <div className="flex justify-center lg:justify-end">
+                <div className="flex justify-center lg:justify-end opacity-80 hover:opacity-100 transition-opacity duration-500 scale-95 origin-center lg:origin-bottom-right">
                     <MusicPlayer />
                 </div>
             </div>
