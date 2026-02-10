@@ -1,6 +1,6 @@
 import { FileDown } from "lucide-react";
 
-const RESUME_FILENAME = "AMAN KUMAR - CV 2025.pdf";
+const RESUME_FILENAME = "AMAN-Kumar.pdf";
 
 export default function ResumePage() {
     return (
